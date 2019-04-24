@@ -30,7 +30,9 @@ export default {
   },
   methods: {
     toggle (e) {
-      this.activedIndex = parseInt(e.target.dataset.index)
+      if (e.target.nodeName.toLowerCase() === 'li') {
+        this.activedIndex = parseInt(e.target.dataset.index)
+      }
     },
     selfStyle (index) {
       let selfStyle = {

@@ -11,7 +11,12 @@
           <cruiseChildNav :navLists="childNavLists" class="main-nav"></cruiseChildNav>
           <div class="main-content clear">
             <div class="content-left">
-              <server-detail :serverLists="serverLists"></server-detail>
+              <cruise-server-detail v-for="(item, index) in serverLists"
+              v-on:handleAddResource="handleAddResource"
+              v-on:handleDeleteResource="handleDeleteResource"
+              :index="index"
+              v-bind="item"
+              :key="index"></cruise-server-detail>
             </div>
             <div class="content-right">
               <h4 class="title">Summary</h4>
@@ -21,28 +26,28 @@
               </ul>
               <h4 class="title">History</h4>
               <div class="line"></div>
-              <ul class="history-list ellipsis">
-                <li v-for="item in history" :key="item">
+              <ul class="history-list">
+                <li v-for="(item,index) in history" :key="index" class="ellipsis">
                   <span class="text">{{item}}</span>
                 </li>
               </ul>
             </div>
           </div>
         </div>
-        <p>Copyright: Thoughtworks Inc.</p>
+        <p class="copyright">Copyright: Thoughtworks Inc.</p>
     </div>
 </template>
 
 <script>
-import cruiseNav from '@/components/nav.vue'
-import cruiseChildNav from '@/components/childNav.vue'
-import serverDetail from '@/components/serverDetail.vue'
+import cruiseNav from '@/components/Nav.vue'
+import cruiseChildNav from '@/components/ChildNav.vue'
+import cruiseServerDetail from '@/components/ServerDetail.vue'
 
 export default {
   components: {
     cruiseNav,
     cruiseChildNav,
-    serverDetail
+    cruiseServerDetail
   },
   data () {
     return {
@@ -104,6 +109,13 @@ export default {
       ]
     }
   },
+  created () {
+    this.$http.get('static/initdata.txt').then(res => {
+      /* res.body = JSON.parse(JSON.stringify(res.body))
+      console.log(typeof res.body) */
+      // console.log(typeof JSON.parse res.body.toString('utf-8'))
+    })
+  },
   computed: {
     requiresummary () {
       if (!this.serverLists.length) return
@@ -117,16 +129,24 @@ export default {
       }
       return states
     }
+  },
+  methods: {
+    handleAddResource ({addedResources, index}) {
+      this.serverLists.splice(index, 1, {
+        ...this.serverLists[index],
+        resources: this.serverLists[index]['resources'].concat(addedResources)
+      })
+    },
+    handleDeleteResource ({index, i}) {
+      this.serverLists[index]['resources'].splice(i, 1)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
     .page-wrap {
-      background-color:bisque;
-      a {
-        text-decoration: underline;
-      }
+      background-color:#fff;
       li {
         list-style: none;
       }
@@ -136,10 +156,11 @@ export default {
         float: right;
         .arrow-line {
           display: inline-block;
+          vertical-align: middle;
           width: 5px;
           height: 3px;
+          margin-left: 20px;
           background-color: black;
-          vertical-align: middle;
         }
         .arrow {
           display: inline-block;
@@ -151,11 +172,12 @@ export default {
     .nav-wrap {
       position: relative;
       .title {
-        font-size: 36px;
+        font-size: 48px;
         font-weight: normal;
         position: absolute;
         left: 0;
-        right: 0
+        right: 0;
+        bottom: 10px
       }
       .nav-lists {
         float: right;
@@ -164,13 +186,13 @@ export default {
     }
     .main {
         width: 100%;
-        background-color: $ele-bg;
         border: 3px solid $border;
         box-sizing: border-box;
         margin-top: -3px;
         .main-nav {
           padding: 12px 0;
           padding-left: 10px;
+          border-bottom: 3px solid $border;
           background-color: #606060;
         }
         .main-content {
@@ -186,8 +208,7 @@ export default {
             box-sizing: border-box;
             width: 24%;
             padding: 18px 8px 0 28px;
-            border-left: 1px solid $border;
-            background-color: rgb(69, 96, 126);
+            border-left: 2px solid $border;
             .title {
               padding-bottom: 6px;
             }
@@ -212,5 +233,10 @@ export default {
             }
           }
         }
+    }
+    .copyright {
+      padding: 10px 0 20px 0;
+      font-weight: bold;
+      font-size: 12px;
     }
 </style>

@@ -1,5 +1,6 @@
 @import 'elements/button';
-import 
+@import '../assets/font.css';
+
 body,
 div,
 span,
@@ -36,20 +37,25 @@ figcaption {
   font-style: normal;
   text-decoration: none;
   border: none;
-  // color: #333;
-  //font-weight: normal;
-  //font-family: "Microsoft Yahei";
-  // box-sizing: border-box;
-  //-webkit-tap-highlight-color: transparent;
-  //-webkit-font-smoothing: antialiased;
-  /* &:hover {
-    outline: none;
-  } */
+  color: #000;
+  font-family: "Source Han Sans";
 }
 
 html,
 body {
    height: 100%;
+}
+
+a {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+input,
+button
+ {
+  outline: none;
+  border: 1px solid $border
 }
 
 .app-container {
@@ -60,7 +66,7 @@ body {
 .page-container {
   min-width: $container;
   margin: 0 auto;
-  padding: 50px 50px 0 50px;
+  padding: 0 33px;
 }
 
 .ellipsis {

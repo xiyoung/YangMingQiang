@@ -55,6 +55,7 @@ export default {
   }
   .title {
       color: #ebebeb;
+      font-size: 22px;
   }
   .category {
     box-sizing: border-box;
