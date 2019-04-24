@@ -1,5 +1,5 @@
 @import 'elements/button';
-
+import 
 body,
 div,
 span,
@@ -61,6 +61,12 @@ body {
   min-width: $container;
   margin: 0 auto;
   padding: 50px 50px 0 50px;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .clear:after {

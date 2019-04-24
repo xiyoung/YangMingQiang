@@ -5,78 +5,26 @@
         </header>
         <div class="nav-wrap clear">
           <h2 class="title">Cruise</h2>
-          <ul class="nav-lists clear">
-            <li>DASHBOARD</li>
-            <li>MY CRUISE</li>
-            <li class="active">AGENTS</li>
-            <li>HELP</li>
-          </ul>
+          <cruise-nav :navLists="navLists" class="nav-lists clear"></cruise-nav>
         </div>
         <div class="main">
-          <div class="main-nav">
-            <span class="title">Agents</span><span class="category">All</span><span class="category active">Physical</span><span class="category">Virtual</span>
-          </div>
+          <cruiseChildNav :navLists="childNavLists" class="main-nav"></cruiseChildNav>
           <div class="main-content clear">
             <div class="content-left">
-              <ul>
-                <li class="server-detail-wrap clear">
-                  <div class="icon"></div>
-                  <div class="detail">
-                    <div><span>bgstdmngbgr02.thoughtworks.com</span><span>|idle|192.168.1.2| /var/lib/cruise-agent</span></div>
-                    <div class="resource-wrap clear">
-                      <div class="add-action">+ <a href="">Specify Resource</a>| Resources: </div>
-                      <div class="resource-list">
-                        <ul class="clear">
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                          <li class="resource">ubuntu <i>*</i></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-              </ul>
+              <server-detail :serverLists="serverLists"></server-detail>
             </div>
             <div class="content-right">
-              <h5>Summary</h5>
+              <h4 class="title">Summary</h4>
               <div class="line"></div>
               <ul class="summary-list">
-                <li><span class="text">building</span><span>2</span></li>
-                <li><span class="text">idle</span><span>2</span></li>
+                <li v-for="(stateCount, stateName) in requiresummary" :key="stateName"><span class="text">{{stateName}}</span><span>{{stateCount}}</span></li>
               </ul>
-              <h5>History</h5>
+              <h4 class="title">History</h4>
               <div class="line"></div>
-              <ul class="history-list">
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
-                <li><span class="text">bjstdmngbgr02/Acceptance_test</span></li>
+              <ul class="history-list ellipsis">
+                <li v-for="item in history" :key="item">
+                  <span class="text">{{item}}</span>
+                </li>
               </ul>
             </div>
           </div>
@@ -86,10 +34,88 @@
 </template>
 
 <script>
+import cruiseNav from '@/components/nav.vue'
+import cruiseChildNav from '@/components/childNav.vue'
+import serverDetail from '@/components/serverDetail.vue'
+
 export default {
+  components: {
+    cruiseNav,
+    cruiseChildNav,
+    serverDetail
+  },
   data () {
     return {
-      home: 'home'
+      navLists: [
+        {title: 'DASHBOARD'},
+        {title: 'MY CRUISE'},
+        {title: 'AGENTS'},
+        {title: 'HELP'}
+      ],
+      childNavLists: [
+        {title: 'Agents'},
+        {title: 'All'},
+        {title: 'Physical'},
+        {title: 'Virtual'}
+      ],
+      serverLists: [
+        {
+          domain: 'bgstdmngbgr02.thoughtworks.com',
+          state: 'idle',
+          ip: '192.168.1.2',
+          directory: '/var/lib/cruise-agent',
+          isDeny: true,
+          resources: ['ubuntu', 'firefox3', 'core-due', 'mysql']
+        },
+        {
+          domain: 'bgstdmngbgr02.thoughtworks.com',
+          state: 'idle',
+          ip: '192.168.1.2',
+          directory: '/var/lib/cruise-agent',
+          isDeny: false,
+          resources: ['ubuntu', 'firefox3', 'core-due', 'mysql']
+        },
+        {
+          domain: 'bgstdmngbgr02.thoughtworks.com',
+          state: 'idle',
+          ip: '192.168.1.2',
+          directory: '/var/lib/cruise-agent',
+          isDeny: true,
+          resources: ['ubuntu', 'firefox3', 'core-due', 'mysql']
+        },
+        {
+          domain: 'bgstdmngbgr02.thoughtworks.com',
+          state: 'building',
+          ip: '192.168.1.2',
+          directory: '/var/lib/cruise-agent',
+          isDeny: true,
+          resources: ['ubuntu', 'firefox3', 'core-due', 'mysql']
+        }
+      ],
+      history: [
+        'bjstdmngbgr02/Acceptance_test',
+        'bjstdmngbgr02/Acceptance_test',
+        'bjstdmngbgr02/Acceptance_test',
+        'bjstdmngbgr02/Acceptance_test',
+        'bjstdmngbgr02/Acceptance_test',
+        'bjstdmngbgr02/Acceptance_test',
+        'bjstdmngbgr02/Acceptance_test',
+        'bjstdmngbgr02/Acceptance_test'
+      ]
+    }
+  },
+  computed: {
+    requiresummary () {
+      if (!this.serverLists.length) return
+      const states = {}
+      for (let server of this.serverLists) {
+        if (states[server.state]) {
+          states[server.state]++
+        } else {
+          states[server.state] = 1
+        }
+      }
+      return states
     }
   }
 }
@@ -134,104 +160,57 @@ export default {
       .nav-lists {
         float: right;
         padding-top: 20px;
-        li {
-          float: left;
-          padding: 5px;
-          margin-left: 4px;
-          border: 1px solid $border;
-          border-radius: 14px 12px 0 0;
-          background-color: rgb(59, 54, 54);
-          bottom: 0;
-        }
-        background-color: rgb(85, 59, 59);
-        li.active {
-          background-color:rgb(73, 71, 68);
-          // padding-bottom: 7px;
-          color: #fff;
-        }
       }
     }
     .main {
         width: 100%;
         background-color: $ele-bg;
+        border: 3px solid $border;
+        box-sizing: border-box;
+        margin-top: -3px;
         .main-nav {
           padding: 12px 0;
           padding-left: 10px;
-          background-color: rgb(228, 144, 144);
-          .title,
-          .category {
-            margin-left: 10px;
-            vertical-align: middle;
-          }
-          .category {
-            display: inline-block;
-            height: 20px;
-            line-height: 20px;
-            min-width: 68px;
-            font-size: 12px;
-            border: 1px solid $border;
-            text-align: center;
-            border-radius: 10px;
-            background: rgb(83, 80, 80);
-          }
-          span.active {
-            background: rgb(92, 65, 65);
-          }
+          background-color: #606060;
         }
         .main-content {
           .content-left {
-            width: calc(76% - 45px) ;
-            padding: 0 10px 10px 10px;
+            box-sizing: border-box;
             float: left;
-            .server-detail-wrap{
-              background-color: rgb(105, 153, 124);
-              margin-top: 10px;
-              padding: 10px;
-              border: 1px solid $border;
-              .icon {
-                float: left;
-                width: 50px;
-                height: 50px;
-                border-radius: 50px;
-                background-color: rgb(170, 182, 181);
-                margin-right: 20px;
-              }
-              .detail {
-                .resource-wrap {
-                  .add-action,
-                  .resource-list
-                   {
-                    float: left;
-                    .resource {
-                      float: left;
-                    }
-                  }
-                }
-              }
-            }
+            width: 76%;
+            padding: 0 18px 18px 18px;
+            // border-right: 1px solid $border;
           }
           .content-right {
-            width: 24%;
             float: right;
+            box-sizing: border-box;
+            width: 24%;
+            padding: 18px 8px 0 28px;
+            border-left: 1px solid $border;
             background-color: rgb(69, 96, 126);
-            padding: 10px 10px 10px 15px;
+            .title {
+              padding-bottom: 6px;
+            }
             .line {
-              border: 1px solid salmon
+              padding: 1px 0;
+              background-color: #d0d0d0;
             }
             .summary-list {
-              .text {
-                display: inline-block;
-                width: 50%;
+              padding-bottom: 14px;
+              li {
+                padding: 10px 0;
+                .text {
+                  display: inline-block;
+                  width: 50%;
+                }
               }
             };
             .history-list {
               li {
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                }
+                padding: 9px 0;
               }
             }
           }
+        }
     }
 </style>
