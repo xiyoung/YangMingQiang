@@ -10,7 +10,7 @@
         <div class="main">
           <cruiseChildNav :navLists="childNavLists" class="main-nav"></cruiseChildNav>
           <div class="main-content clear">
-            <div class="content-left">
+            <div class="content-left" v-if="serverLists.length">
               <cruise-server-detail v-for="(item, index) in serverLists"
               v-on:handleAddResource="handleAddResource"
               v-on:handleDeleteResource="handleDeleteResource"
@@ -63,40 +63,7 @@ export default {
         {title: 'Physical'},
         {title: 'Virtual'}
       ],
-      serverLists: [
-        {
-          domain: 'bgstdmngbgr02.thoughtworks.com',
-          state: 'idle',
-          ip: '192.168.1.2',
-          directory: '/var/lib/cruise-agent',
-          isDeny: true,
-          resources: ['ubuntu', 'firefox3', 'core-due', 'mysql']
-        },
-        {
-          domain: 'bgstdmngbgr02.thoughtworks.com',
-          state: 'idle',
-          ip: '192.168.1.2',
-          directory: '/var/lib/cruise-agent',
-          isDeny: false,
-          resources: ['ubuntu', 'firefox3', 'core-due', 'mysql']
-        },
-        {
-          domain: 'bgstdmngbgr02.thoughtworks.com',
-          state: 'idle',
-          ip: '192.168.1.2',
-          directory: '/var/lib/cruise-agent',
-          isDeny: true,
-          resources: ['ubuntu', 'firefox3', 'core-due', 'mysql']
-        },
-        {
-          domain: 'bgstdmngbgr02.thoughtworks.com',
-          state: 'building',
-          ip: '192.168.1.2',
-          directory: '/var/lib/cruise-agent',
-          isDeny: true,
-          resources: ['ubuntu', 'firefox3', 'core-due', 'mysql']
-        }
-      ],
+      serverLists: [],
       history: [
         'bjstdmngbgr02/Acceptance_test',
         'bjstdmngbgr02/Acceptance_test',
@@ -109,11 +76,9 @@ export default {
       ]
     }
   },
-  created () {
-    this.$http.get('static/initdata.txt').then(res => {
-      /* res.body = JSON.parse(JSON.stringify(res.body))
-      console.log(typeof res.body) */
-      // console.log(typeof JSON.parse res.body.toString('utf-8'))
+  mounted () {
+    this.initData().then(data => {
+      this.serverLists = data
     })
   },
   computed: {
@@ -139,6 +104,31 @@ export default {
     },
     handleDeleteResource ({index, i}) {
       this.serverLists[index]['resources'].splice(i, 1)
+    },
+    initData () {
+      const self = this
+      return self.$http.get('static/initdata.txt').then(res => {
+        try {
+          const initStr = self.transferString(res.body).split('serverLists:')[1]
+          const arr = JSON.parse(initStr)
+          return arr
+        } catch (error) {
+          console.log(error)
+          throw error
+        }
+      })
+        .catch(() => {
+          return []
+        })
+    },
+    transferString (content) {
+      let str
+      try {
+        str = content.replace(/\r\n/g, '').replace(/\n/g, '').replace(/\s*/g, '')
+      } catch (e) {
+        console.log(e.message)
+      }
+      return str
     }
   }
 }
@@ -147,9 +137,6 @@ export default {
 <style lang="scss" scoped>
     .page-wrap {
       background-color:#fff;
-      li {
-        list-style: none;
-      }
     }
     .sign-wrap {
       .sign {
@@ -186,13 +173,13 @@ export default {
     }
     .main {
         width: 100%;
-        border: 3px solid $border;
+        border: 4px solid $border;
         box-sizing: border-box;
-        margin-top: -3px;
+        margin-top: -4px;
         .main-nav {
           padding: 12px 0;
           padding-left: 10px;
-          border-bottom: 3px solid $border;
+          border-bottom: 4px solid $border;
           background-color: #606060;
         }
         .main-content {
@@ -201,7 +188,6 @@ export default {
             float: left;
             width: 76%;
             padding: 0 18px 18px 18px;
-            // border-right: 1px solid $border;
           }
           .content-right {
             float: right;

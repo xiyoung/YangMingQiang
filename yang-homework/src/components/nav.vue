@@ -60,7 +60,7 @@ export default {
       bottom: 0;
       margin-left: 4px;
       padding: 8px 15px;
-      border: 3px solid $border;
+      border: 4px solid $border;
       border-radius: 14px 12px 0 0;
       cursor: pointer;
     }

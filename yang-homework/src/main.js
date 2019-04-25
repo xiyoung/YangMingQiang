@@ -3,7 +3,7 @@ import router from './router'
 import VueResource from 'vue-resource'
 
 import '@/styles/global.scss'
-import '@/icons' // icon
+import '@/icons' // svg-icon
 
 import App from './App'
 
