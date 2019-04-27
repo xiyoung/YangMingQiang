@@ -11,15 +11,6 @@ yarn
 # serve with hot reload at localhost:8080
 yarn dev
 
-# build for production with minification
-yarn build
-
-# build for production and view the bundle analyzer report
-yarn build --report
-
-# run unit tests
-yarn unit
-
 # run all tests
 yarn test
 ```
@@ -33,8 +24,8 @@ yarn test
 ├──node_modules --第三方模块
 ├──src
 │ ├──assets
-| 	├──DroidSansFallback.ttf --思源楷体字体图标库
-| 	├──font.css --引入思源楷体
+| 	├──DroidSansFallback.ttf --思源黑体字体图标库
+| 	├──font.css --引入思源黑体
 | ├──components --业务组件
 | ├──icons --svg格式icon图标组件抽离出来，注册为全局组件
 | ├──router --路由
@@ -47,6 +38,6 @@ yarn test
 | ├──main.js --入口js文件
 ├──static
 | ├──initdata.txt --项目初始化数据
-├──test --单元测试 	
+├──test --组件的单元测试 	
 ```
 

@@ -2,27 +2,29 @@
     <div class="server-wrap clear" :class="{server_detail_wrap_deny: !isDeny}">
       <div class="icon"></div>
       <div class="detail">
-        <div class="about-wrap ellipsis"><span class="domain">{{domain}}</span><span class="split">{{state}}</span><span class="split">{{ip}}</span><span class="split">{{directory}}</span></div>
+        <div class="about-wrap ellipsis"><span class="domain">{{domain}}</span><span class="split state">{{state}}</span><span class="split ip">{{ip}}</span><span class="split directory">{{directory}}</span></div>
         <div class="resource-wrap clear">
-          <div class="add-action"><span @click="toggleResourceDialog"><svg-icon class="icon-add" icon-class="add"/><a class="add-text">Specify Resource</a></span>Resources: </div>
+          <div class="add-action"><span class="add-action-text" @click="toggleResourceDialog"><svg-icon class="icon-add" icon-class="add"/><a class="add-text">Specify Resource</a></span>Resources: </div>
           <div class="resource-list">
             <ul class="clear">
-              <li class="resource" v-for="(resource, i) in resources" :key="i"><span>{{resource}}</span><span @click="deleteResource(index, i)"><svg-icon class="icon-delete" icon-class="delete"/></span></li>
+              <li class="resource" v-for="(resource, i) in resources" :key="i"><span>{{resource}}</span><span class="delete-icon-wrap" @click="deleteResource(index, i)"><svg-icon class="icon-delete" icon-class="delete"/></span></li>
             </ul>
           </div>
         </div>
-        <div class="deny" v-if="isDeny"><svg-icon class="icon-deny" icon-class="deny"/><a href="" class="deny-text">Deny</a></div>
+        <div class="deny" v-if="isDeny"><svg-icon class="icon-deny" icon-class="deny"/><a class="deny-text">Deny</a></div>
         <cruise-add-resource v-on="$listeners" :index="index" v-bind:isShow.sync="showAddResourceDialog" class="add-resource-dialog-wrap"></cruise-add-resource>
       </div>
     </div>
 </template>
 
 <script>
-import cruiseAddResource from '@/components/addResource.vue'
+import cruiseAddResource from '@/components/AddResource.vue'
+import svgIcon from '@/components/SvgIcon'
 
 export default {
   components: {
-    cruiseAddResource
+    cruiseAddResource,
+    svgIcon
   },
   props: {
     index: {
