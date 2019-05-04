@@ -53,11 +53,18 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        loader: 'svg-sprite-loader',
+        use: [
+          {loader: 'svg-sprite-loader', options: {
+            symbolId: 'icon-[name]'
+          }},
+          {loader: 'svgo-loader', options: {
+            plugins: [
+             { removeViewBox: false },
+             { removeXMLNS: true }
+            ]
+          }}
+        ],
         include: [resolve('src/icons')],
-        options: {
-          symbolId: 'icon-[name]'
-        }
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

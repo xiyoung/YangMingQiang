@@ -10,7 +10,7 @@
         <div class="main">
           <cruiseChildNav :navLists="childNavLists" class="main-nav"></cruiseChildNav>
           <div class="main-content clear">
-            <div class="content-left" v-if="serverLists.length">
+            <div ref="contentLeft" :class="{take_height_left: takeHeight === 'left'}" class="content-left" v-if="serverLists.length">
               <cruise-server-detail v-for="(item, index) in serverLists"
               v-on:handleAddResource="handleAddResource"
               v-on:handleDeleteResource="handleDeleteResource"
@@ -18,7 +18,7 @@
               v-bind="item"
               :key="index"></cruise-server-detail>
             </div>
-            <div class="content-right">
+            <div ref="contentRight" :class="{take_height_right: takeHeight === 'right'}" class="content-right">
               <h4 class="title">Summary</h4>
               <div class="line"></div>
               <ul class="summary-list">
@@ -51,6 +51,7 @@ export default {
   },
   data () {
     return {
+      takeHeight: '',
       navLists: [
         {title: 'DASHBOARD'},
         {title: 'MY CRUISE'},
@@ -71,7 +72,6 @@ export default {
         'bjstdmngbgr02/Acceptance_test',
         'bjstdmngbgr02/Acceptance_test',
         'bjstdmngbgr02/Acceptance_test',
-        'bjstdmngbgr02/Acceptance_test',
         'bjstdmngbgr02/Acceptance_test'
       ]
     }
@@ -79,6 +79,11 @@ export default {
   mounted () {
     this.initData().then(data => {
       this.serverLists = data
+      this.$nextTick(() => {
+        const lHeight = this.$refs.contentLeft.offsetHeight
+        const rHeight = this.$refs.contentRight.offsetHeight
+        this.takeHeight = lHeight > rHeight ? 'left' : 'right'
+      })
     })
   },
   computed: {
@@ -183,18 +188,24 @@ export default {
           background-color: #606060;
         }
         .main-content {
+          div.take_height_left {
+            border-right: 2px solid $border;
+          }
           .content-left {
             box-sizing: border-box;
             float: left;
             width: 76%;
             padding: 0 18px 18px 18px;
           }
+          div.take_height_right {
+            border-left: 2px solid $border;
+          }
           .content-right {
             float: right;
             box-sizing: border-box;
             width: 24%;
             padding: 18px 8px 0 28px;
-            border-left: 2px solid $border;
+            // border-left: 2px solid $border;
             .title {
               padding-bottom: 6px;
             }

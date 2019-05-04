@@ -11,7 +11,7 @@
             </ul>
           </div>
         </div>
-        <div class="deny" v-if="isDeny"><svg-icon class="icon-deny" icon-class="deny"/><a class="deny-text">Deny</a></div>
+        <div class="deny" v-if="isDeny"><svg-icon class="icon-deny" icon-class="deny"/><span class="deny-text">Deny</span></div>
         <cruise-add-resource v-on="$listeners" :index="index" v-bind:isShow.sync="showAddResourceDialog" class="add-resource-dialog-wrap"></cruise-add-resource>
       </div>
     </div>
@@ -138,7 +138,6 @@ export default {
     position: absolute;
     right: -52px;
     top: 24px;
-    cursor: pointer;
     .icon-deny {
       width: 20px;
       height: 20px;
@@ -146,6 +145,7 @@ export default {
     };
     .deny-text {
       vertical-align: bottom;
+      text-decoration: underline;
       color: #000;
     }
   }
